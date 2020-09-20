@@ -14,6 +14,7 @@ public abstract class CacheAccessVerticle extends AbstractVerticle {
 
     private static final String CACHE_NAME_VARIABLE = "MISSION_CACHE_NAME";
     private static final String CACHE_NAME_DEFAULT = "mission";
+    private static final String CRT_PATH = "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt";
 
     private final Logger logger = LoggerFactory.getLogger(CacheAccessVerticle.class.getName());
 
@@ -58,6 +59,7 @@ public abstract class CacheAccessVerticle extends AbstractVerticle {
                     config().getString("jdg.app.name"),
                     config().getString("jdg.app.user.name"),
                     config().getString("jdg.app.user.password"));
+            cfg.security().ssl().trustStorePath(CRT_PATH);
         } else { // Incase running local
             cfg = new ConfigurationBuilder().addServer()
                     .host(config().getString("jdg.host", "localhost"))
